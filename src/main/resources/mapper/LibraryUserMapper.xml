@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.LibraryUserMapper">
+    <!--映射结果集-->
+    <resultMap id="libraryUserBaseMap" type="com.demo.entity.LibraryUser">
+        <result property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="gender" column="gender"/>
+        <result property="nickname" column="nickname"/>
+        <result property="salt" column="salt"/>
+        <result property="userStatus" column="user_status"/>
+        <result property="userDesc" column="user_desc"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="findUserByUsername" resultMap="libraryUserBaseMap">
+        select user_id,
+               username,
+               password,
+               salt,
+               nickname,
+               email,
+               gender,
+               user_desc,
+               user_status,
+               create_time,
+               update_time
+        from library_user
+        where username = #{username}
+    </select>
+
+    <select id="findUserByEmail" resultMap="libraryUserBaseMap">
+        select user_id,
+               username,
+               password,
+               salt,
+               nickname,
+               email,
+               gender,
+               user_desc,
+               user_status,
+               create_time,
+               update_time
+        from library_user
+        where email = #{email}
+    </select>
+
+    <insert id="saveLibraryUser" parameterType="com.demo.entity.LibraryUser" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        insert into library_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">
+                username,
+            </if>
+            <if test="password != null and password != ''">
+                password,
+            </if>
+            <if test="salt != null and salt != ''">
+                salt,
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname,
+            </if>
+            <if test="email != null and email != '' ">
+                email,
+            </if>
+            <if test="gender != null and gender != '' ">
+                gender,
+            </if>
+            <if test="userDesc != null and userDesc != '' ">
+                user_desc,
+            </if>
+            <if test="userStatus != null and userStatus != '' ">
+                user_status,
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                create_time,
+            </if>
+            <if test="updateTime != null and updateTime != '' ">
+                update_time
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">
+                #{username},
+            </if>
+            <if test="password != null and password != ''">
+                #{password},
+            </if>
+            <if test="salt != null and salt != ''">
+                #{salt},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                #{nickname},
+            </if>
+            <if test="email != null and email != '' ">
+                #{email},
+            </if>
+            <if test="gender != null and gender != '' ">
+                #{gender},
+            </if>
+            <if test="userDesc != null and userDesc != '' ">
+                #{userDesc},
+            </if>
+            <if test="userStatus != null and userStatus != '' ">
+                #{userStatus},
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                #{updateTime}
+            </if>
+        </trim>
+    </insert>
+</mapper>
