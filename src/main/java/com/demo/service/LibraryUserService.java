@@ -1,6 +1,7 @@
 package com.demo.service;
 
 import com.demo.entity.LibraryUser;
+import com.demo.entity.dto.ApiResponse;
 import com.demo.entity.request.RegisterUser;
 
 import java.util.List;
@@ -38,4 +39,11 @@ public interface LibraryUserService {
      * @return
      */
     LibraryUser RegisterUser(RegisterUser registerUser);
+
+    /**
+     * 注册用户
+     * @param registerUser 注册用户
+     * @return
+     */
+    ApiResponse registerUser(RegisterUser registerUser);
 }

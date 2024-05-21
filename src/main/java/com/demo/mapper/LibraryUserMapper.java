@@ -33,4 +33,17 @@ public interface LibraryUserMapper {
      */
     int saveLibraryUser(LibraryUser libraryUser);
 
+    /**
+     * 校验用户是否重名
+     * @param user 用户
+     * @return
+     */
+    int checkLibraryUserSameName(LibraryUser user);
+
+    /**
+     * 校验邮箱是否重复
+     * @param user 用户
+     * @return
+     */
+    int checkLibraryUserSameEmail(LibraryUser user);
 }
