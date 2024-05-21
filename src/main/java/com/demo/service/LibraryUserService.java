@@ -1,6 +1,7 @@
 package com.demo.service;
 
 import com.demo.entity.LibraryUser;
+import com.demo.entity.request.RegisterUser;
 
 import java.util.List;
 
@@ -30,4 +31,11 @@ public interface LibraryUserService {
      * @param user 用户
      */
     void saveLibraryUser(LibraryUser user);
+
+    /**
+     * 注册用户
+     * @param registerUser 用户对象
+     * @return
+     */
+    LibraryUser RegisterUser(RegisterUser registerUser);
 }

@@ -57,7 +57,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         String userStatus = user.getUserStatus();
 
         if (userStatus.equals(LibraryStatus.NORMAL.getStatusCode())) {
-            return new User(user.getUsername(), user.getPassword(), Collections.emptyList());
+            // 密码是 Base64盐 + ":" +encodePassword 密码
+            String saltPassword = user.getSalt() + ":" +user.getPassword();
+            return new User(user.getUsername(), saltPassword, Collections.emptyList());
         }
 
 

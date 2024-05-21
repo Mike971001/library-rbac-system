@@ -5,6 +5,7 @@ import com.demo.entity.request.LoginUser;
 import com.demo.entity.request.RegisterUser;
 import com.demo.service.LibraryUserService;
 import com.demo.utils.JwtUtils;
+import com.demo.utils.SaltGenerateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,13 +42,24 @@ public class AuthController {
      * @param registerUser
      * @return
      */
-    @PostMapping(value = "/register")
+    /*@PostMapping(value = "/register")
     public String register(@RequestBody RegisterUser registerUser){
         LibraryUser user = new LibraryUser();
         user.setUsername(registerUser.getUsername());
         user.setPassword(passwordEncoder.encode(registerUser.getPassword()));
         user.setEmail(registerUser.getEmail());
         userService.saveLibraryUser(user);
+        return "User registered successfully, UserId: " +user.getUserId();
+    }*/
+
+    /**
+     * 用户注册
+     * @param registerUser
+     * @return
+     */
+    @PostMapping(value = "/register")
+    public String register(@RequestBody RegisterUser registerUser){
+        LibraryUser user = userService.RegisterUser(registerUser);
         return "User registered successfully, UserId: " +user.getUserId();
     }
 
