@@ -1,15 +1,17 @@
 package com.demo.web;
 
+import com.demo.constant.LibrarySystemConstant;
 import com.demo.entity.LibraryUser;
+import com.demo.entity.dto.ApiResponse;
 import com.demo.entity.request.LoginUser;
 import com.demo.entity.request.RegisterUser;
 import com.demo.service.LibraryUserService;
 import com.demo.utils.JwtUtils;
+import com.demo.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,22 +35,14 @@ public class AuthController {
     @Autowired
     private LibraryUserService userService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     /**
      * 用户注册
-     * @param registerUser
+     * @param registerUser 注册的用户
      * @return
      */
     @PostMapping(value = "/register")
-    public String register(@RequestBody RegisterUser registerUser){
-        LibraryUser user = new LibraryUser();
-        user.setUsername(registerUser.getUsername());
-        user.setPassword(passwordEncoder.encode(registerUser.getPassword()));
-        user.setEmail(registerUser.getEmail());
-        userService.saveLibraryUser(user);
-        return "User registered successfully, UserId: " +user.getUserId();
+    public ApiResponse register(@RequestBody RegisterUser registerUser){
+        return userService.registerUser(registerUser);
     }
 
     /**
@@ -57,14 +51,17 @@ public class AuthController {
      * @return
      */
     @PostMapping(value = "/login")
-    public String login(@RequestBody LoginUser loginUser) {
+    public ApiResponse login(@RequestBody LoginUser loginUser) {
         // 通过用户名和密码获取 ===> 认证 token
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword());
 
         Authentication authentication = authenticationManager
                 .authenticate(authenticationToken);
 
-        return jwtUtils.generateJwtToken(authentication.getName());
+        // 拼接token前缀
+        String jwtToken = LibrarySystemConstant.JWT_TOKEN_PREFIX +jwtUtils.generateJwtToken(authentication.getName());
+
+        return ResponseUtil.success("登录成功",jwtToken);
     }
 
 }

@@ -9,3 +9,7 @@ values (1, 'admin', '$2a$10$I5NVBUyI0IVdlkFffaJiHOEEaRWvGumBja35BGB/wh7drOKOAqNJ
         '用户自述', '2', '2024-05-20 17:34:49', '2024-05-20 19:18:14');
 
 -- 加盐加密的版本暂时没有更新
+
+insert into library_role(role_name,role_code,role_desc) values('管理员','ADMIN','最高管理员');
+
+select * from library_role;

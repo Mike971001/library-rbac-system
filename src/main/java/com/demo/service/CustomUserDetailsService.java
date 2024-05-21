@@ -6,6 +6,7 @@ import com.demo.mapper.LibraryUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author: 今天不加班
@@ -57,7 +60,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         String userStatus = user.getUserStatus();
 
         if (userStatus.equals(LibraryStatus.NORMAL.getStatusCode())) {
-            return new User(user.getUsername(), user.getPassword(), Collections.emptyList());
+            // 密码是 Base64盐 + ":" +encodePassword 密码
+            String saltPassword = user.getSalt() + ":" +user.getPassword();
+            // 构建权限用户列表
+            Set<GrantedAuthority> authorities = new HashSet<>();
+
+            // 配置用户权限
+            return new User(user.getUsername(), saltPassword, Collections.emptyList());
         }
 
 

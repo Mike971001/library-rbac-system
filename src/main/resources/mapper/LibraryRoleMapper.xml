@@ -14,4 +14,121 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <insert id="saveLibraryRole" parameterType="com.demo.entity.LibraryRole" keyProperty="roleId" keyColumn="role_id" useGeneratedKeys="true">
+        insert into library_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleName != null and roleName != '' ">
+                role_name,
+            </if>
+            <if test="roleDesc != null and roleDesc != '' ">
+                role_desc,
+            </if>
+            <if test="roleCode != null and roleCode != '' ">
+                role_code,
+            </if>
+            <if test="roleStatus != null and roleStatus != '' ">
+                role_status,
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                create_time,
+            </if>
+            <if test="updateTime != null and updateTime != '' ">
+                update_time
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleName != null and roleName != '' ">
+                #{roleName},
+            </if>
+            <if test="roleDesc != null and roleDesc != '' ">
+                #{roleDesc},
+            </if>
+            <if test="roleCode != null and roleCode != '' ">
+                #{roleCode},
+            </if>
+            <if test="roleStatus != null and roleStatus != '' ">
+                #{roleStatus},
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != '' ">
+                #{updateTime}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="checkLibraryRoleIsDeleted" resultType="int" parameterType="java.util.List">
+        select count(0) from library_role where role_status = 2 and role_id in
+        <foreach item="roleId" open="(" close=")" separator="," collection="roleIds">
+            #{roleId}
+        </foreach>
+    </select>
+
+    <update id="batchLogicDeleteLibraryRole">
+        update library_role set role_status = 2 where role_id in
+            <foreach item="roleId" open="(" close=")" separator="," collection="roleIds">
+                #{roleId}
+            </foreach>
+    </update>
+
+    <update id="batchDisableLibraryRole">
+        update library_role set role_status = 1 where role_id in
+        <foreach item="roleId" open="(" close=")" separator="," collection="roleIds">
+            #{roleId}
+        </foreach>
+    </update>
+
+    <update id="batchNormalLibraryRole">
+        update library_role set role_status = 0 where role_id in
+        <foreach item="roleId" open="(" close=")" separator="," collection="roleIds">
+            #{roleId}
+        </foreach>
+    </update>
+
+    <update id="updateLibraryRoleByRoleId">
+        update library_role
+        <set>
+            <if test="roleName != null and roleName != '' ">
+                role_name = #{roleName},
+            </if>
+            <if test="roleCode != null and roleCode != '' ">
+                role_code = #{roleCode},
+            </if>
+            <if test="roleDesc != null and roleDesc != '' ">
+                role_desc = #{roleDesc},
+            </if>
+            <if test="roleStatus != null and roleStatus != '' ">
+                role_status = #{roleStatus},
+            </if>
+        </set>
+        where role_id=#{roleId};
+    </update>
+
+    <select id="checkLibraryRoleSameRoleName" resultType="int" parameterType="com.demo.entity.LibraryRole">
+        select count(0) from library_role where role_name = #{roleName}
+        <if test="roleId != 0 and roleId != null">
+            and role_id = #{roleId}
+        </if>
+    </select>
+
+    <!--这个比较忽略大小写-->
+    <select id="checkLibraryRoleSameRoleCode" resultType="int" parameterType="com.demo.entity.LibraryRole">
+        select count(0) from library_role where role_code  COLLATE utf8mb4_general_ci = #{roleCode}
+        <if test="roleId != 0 and roleId != null">
+            and role_id = #{roleId}
+        </if>
+    </select>
+
+    <select id="checkLibraryRoleIsDisable" resultType="int">
+        select count(0) from library_role where role_status = 1 and  role_id in
+        <foreach item="roleId" open="(" close=")" separator="," collection="roleIds">
+            #{roleId}
+        </foreach>
+    </select>
+
+    <select id="getLibraryRoleList" resultMap="libraryRoleBaseMap">
+        select role_id, role_name, role_code, role_desc, role_status, create_time, update_time from library_role
+    </select>
 </mapper>

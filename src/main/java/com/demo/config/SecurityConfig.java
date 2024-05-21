@@ -1,6 +1,7 @@
 package com.demo.config;
 
 import com.demo.security.JwtAuthenticationFilter;
+import com.demo.security.SaltedPasswordEncoder;
 import com.demo.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public SaltedPasswordEncoder passwordEncoder(){
         // 密码加密
-        return new BCryptPasswordEncoder();
+        return new SaltedPasswordEncoder();
     }
 
     /**

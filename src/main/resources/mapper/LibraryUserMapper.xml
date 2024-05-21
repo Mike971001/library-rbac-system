@@ -118,4 +118,18 @@
             </if>
         </trim>
     </insert>
+
+    <select id="checkLibraryUserSameName" resultType="int">
+        select count(0) from library_user where username = #{username}
+        <if test="userId != null and userId != 0">
+            and user_id = #{userId}
+        </if>
+    </select>
+
+    <select id="checkLibraryUserSameEmail" resultType="int">
+        select count(0) from library_user where email = #{email}
+        <if test="userId != null and userId != 0">
+            and user_id = #{userId}
+        </if>
+    </select>
 </mapper>

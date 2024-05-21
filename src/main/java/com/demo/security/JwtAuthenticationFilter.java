@@ -1,5 +1,6 @@
 package com.demo.security;
 
+import com.demo.constant.LibrarySystemConstant;
 import com.demo.service.CustomUserDetailsService;
 import com.demo.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +37,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authorizationHear = request.getHeader("Authorization");
+        // 使用常量方便定义和引用
+        String authorizationHear = request.getHeader(LibrarySystemConstant.AUTH_REQUEST_HEADER);
 
         String username = null;
         String jwt = null;
 
-        if (authorizationHear != null && authorizationHear.startsWith("Bearer ")){
+        // 校验令牌的头部和前缀
+        if (authorizationHear != null && authorizationHear.startsWith(LibrarySystemConstant.JWT_TOKEN_PREFIX)){
             // 获取 jwt 的内容部分
-            jwt = authorizationHear.substring(7);
+            jwt = authorizationHear.substring(LibrarySystemConstant.JWT_TOKEN_PREFIX.length());
             // 从令牌中获取用户名
             username = jwtUtils.getUsernameFromJwtToken(jwt);
         }
